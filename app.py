@@ -9,12 +9,12 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+# ===================== 관람 ===========================
 
 # 관람 리스트 페이지 로드
 @app.route('/performance/watched')
 def watched():
     conn = get_db_connection()
-    # `myperformances`와 `performances`를 JOIN
     watched_performances = conn.execute('''
         SELECT p.* FROM myperformances m
         JOIN performances p ON m.pid = p.pid
@@ -45,16 +45,10 @@ def add_to_watched(performance_id):
 def watchedaddsuccess():
     return render_template('watchedsuccess.html')
 
-
-
-
 # 관람 리스트에서 공연 정보 삭제 
 @app.route('/remove_from_watched/<string:performance_id>', methods=['POST'])
 def remove_from_watched(performance_id):
     conn = get_db_connection()
-    # 중복 여부 확인
-    exists = conn.execute('SELECT * FROM myperformances WHERE pid = ?', (performance_id,)).fetchone()
-
     conn.execute('DELETE FROM myperformances WHERE pid = ?', (performance_id,))
     conn.commit()
     conn.close()
@@ -66,6 +60,8 @@ def remove_from_watched(performance_id):
 def deletewatchedsuccess():
     return render_template('deletewatchedsuccess.html')
 
+
+# ===================== 위시 ===========================
 
 # 위시 리스트 페이지 로드
 @app.route('/performance/wish')
@@ -97,7 +93,6 @@ def add_to_wish(performance_id):
     return redirect(url_for('wishaddsuccess'))
 
 
-
 # 위시 리스트 추가 성공 페이지
 @app.route('/wishaddsuccess')
 def wishaddsuccess():
@@ -108,9 +103,6 @@ def wishaddsuccess():
 @app.route('/remove_from_wish/<string:performance_id>', methods=['POST'])
 def remove_from_wish(performance_id):
     conn = get_db_connection()
-    # 중복 여부 확인
-    exists = conn.execute('SELECT * FROM wishperformances WHERE pid = ?', (performance_id,)).fetchone()
-
     conn.execute('DELETE FROM wishperformances WHERE pid = ?', (performance_id,))
     conn.commit()
     conn.close()
@@ -123,6 +115,7 @@ def deletewishsuccess():
     return render_template('deletewishsuccess.html')
 
 
+# ===================== 후기(리뷰) ===========================
 # 리뷰 작성 페이지
 @app.route('/performance/review/<string:performance_id>', methods=['GET'])
 def reviewPerformance(performance_id):
@@ -133,7 +126,7 @@ def reviewPerformance(performance_id):
     return render_template('review.html', performance=performance)
 
 
-# 리뷰 저장 라우트
+# 리뷰 저장 
 @app.route('/performance/review/<string:performance_id>', methods=['POST'])
 def saveReview(performance_id):
     review_star = request.form.get('review_star', type=int)  # 별점 (int)
@@ -157,9 +150,6 @@ def saveReview(performance_id):
     # 저장 완료 후 관람 리스트 페이지로 리디렉션
     return redirect(url_for('watched'))
 
-
-
-
 # 리뷰 보기 페이지
 @app.route('/performance/seereview/<string:performance_id>', methods=['GET'])
 def seeReview(performance_id):
@@ -173,7 +163,7 @@ def seeReview(performance_id):
     return render_template('seereview.html', performance=performance, review=review)
 
 
-
+# ===================== 검색 ===========================
 # 검색 결과 페이지
 @app.route('/performance/result', methods=['POST'])
 def listPerformance(): 
@@ -204,11 +194,6 @@ def listPerformance():
 def searchPerformance():
    return render_template('search.html')
 
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', debug=True)
-
-
-
 # 상세정보
 @app.route('/performance/detail/<string:performance_id>', methods=['GET'])
 def performanceDetail(performance_id):
@@ -216,5 +201,7 @@ def performanceDetail(performance_id):
     # 특정 공연 정보 조회
     performance = conn.execute('SELECT * FROM performances WHERE pid = ?', (performance_id,)).fetchone()
     conn.close()
-    # 상세 정보 페이지로 렌더링
     return render_template('detail.html', performance=performance)
+    
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', debug=True)
