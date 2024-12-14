@@ -10,10 +10,10 @@
             {% for performance in results %}
                 <li>
                     <h2>{{ performance.pname }}</h2>
-                    <p>날짜: {{ performance.pdate }}</p>
                     <p>장소: {{ performance.pplace }}</p>
+                    <p>날짜: {{ performance.pdate }}</p>
                     <p>출연진: {{ performance.pcast }}</p>
-                    <img src="{{ performance.pposter }}">
+                    <img src="{{ performance.pposter }}" style="width: 200px;">
                 </li>
             {% endfor %}
         </ul>

@@ -26,7 +26,7 @@ def listPerformance():
    query = request.form.get('name')
    db = sqlite3.connect('dbproject.db')
    cursor = db.cursor()
-   cursor.execute("SELECT pname, pplace, pcast FROM performances WHERE pname LIKE ?", ('%' + query + '%',))
+   cursor.execute("SELECT pname, pplace, pdate, pcast, pposter FROM performances WHERE pname LIKE ?", ('%' + query + '%',))
    rows = cursor.fetchall()
    db.close()
    
@@ -34,13 +34,15 @@ def listPerformance():
         {
             'pname': row[0],
             'pplace': row[1],
-            'pcast': row[2],
+            'pdate' : row[2],
+            'pcast': row[3],
+            'pposter' : row[4]
         }
         for row in rows
     ] 
    
    print(results)
-   return render_template('result.html', results=results, query=query)
+   return render_template('result.html', results=results)
     
 # 검색 엔진 페이지 
 @app.route('/performance/search', methods=['GET', 'POST'])
