@@ -9,10 +9,6 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-# 별점 / 후기 작성 페이지
-@app.route('/performance/review')
-def reviewPerformance():
-   return render_template('review.html')
 
 # 관람 리스트 페이지 로드
 @app.route('/performance/watched')
@@ -107,6 +103,21 @@ def saveReview(performance_id):
     
     # 저장 완료 후 관람 리스트 페이지로 리디렉션
     return redirect(url_for('watched'))
+
+
+
+
+# 리뷰 보기 페이지
+@app.route('/performance/seereview/<string:performance_id>', methods=['GET'])
+def seeReview(performance_id):
+    conn = get_db_connection()
+    # 해당 공연 정보 조회
+    performance = conn.execute('SELECT * FROM performances WHERE pid = ?', (performance_id,)).fetchone()
+
+    # 해당 공연의 리뷰 조회
+    review = conn.execute('SELECT * FROM reviews WHERE pid = ?', (performance_id,)).fetchone()
+    conn.close()
+    return render_template('seereview.html', performance=performance, review=review)
 
 
 
