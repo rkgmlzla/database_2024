@@ -1,22 +1,29 @@
-<!DOCTYPE html> 
-<html>
-    <head>
-        <meta charset="utf-8">
-    </head> 
-    <body>
-        <h1>Wish list page</h1>
-        <div>
-            {% for performance in wish_performances %}
-                <div class="performance">
-                    <img src="{{ performance['pposter'] }}" alt="Poster">
-                    <div>
-                        <h2>{{ performance['pname'] }}</h2>                        
-                        <p>장소: {{ performance['pplace'] }}</p>
-                        <p>날짜: {{ performance['pdate'] }}</p>
-                        <p>출연진:{{ performance['pcast'] }}</p>
-                    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관람 상세 정보</title>
+ 
+</head>
+<body>
+    <h1>Wish List Page</h1>
+
+    <div>
+        {% for performance in wish_performances %}
+            <div class="performance-container">
+                <img src="{{ performance['pposter'] }}" alt="Poster">
+                <div>
+                    <h2>{{ performance['pname'] }}</h2>
+                    <p>장소: {{ performance['pplace'] }}</p>
+                    <p>날짜: {{ performance['pdate'] }}</p>
+                    <p>출연진: {{ performance['pcast'] }}</p>
+                    <form action="{{ url_for('remove_from_wish', performance_id=performance['pid']) }}" method="POST">
+                        <button type="submit">삭제</button>
+                    </form>
                 </div>
-            {% endfor %}
-        </div>
-    </body>
+            </div>
+        {% endfor %}
+    </div>
+</body>
 </html>
