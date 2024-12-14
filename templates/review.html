@@ -1,9 +1,35 @@
-<!DOCTYPE html> 
-<html>
-    <head>
-        <meta charset="utf-8">
-    </head> 
-    <body>
-        <h1>Review page</h1>
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리뷰 작성</title>
+</head>
+<body>
+    <h1>리뷰 작성 페이지</h1>
+
+    <!-- 공연 정보 표시 -->
+    <div>
+        <h2>{{ performance['pname'] }}</h2>
+        <p>장소: {{ performance['pplace'] }}</p>
+        <p>날짜: {{ performance['pdate'] }}</p>
+        <p>출연진: {{ performance['pcast'] }}</p>
+    </div>
+
+    <!-- 리뷰 작성 폼 -->
+    <form action="/performance/review/{{ performance['pid'] }}" method="POST">
+        <!-- 별점 입력 -->
+        <label for="review_star">별점 (1~5):</label>
+        <input type="number" id="review_star" name="review_star" min="1" max="5" required>
+        <br><br>
+
+        <!-- 텍스트 리뷰 입력 -->
+        <label for="review_text">리뷰 내용:</label><br>
+        <textarea id="review_text" name="review_text" rows="5" cols="40" required></textarea>
+        <br><br>
+
+        <!-- 저장 버튼 -->
+        <button type="submit">저장</button>
+    </form>
+</body>
 </html>
