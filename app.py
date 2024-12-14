@@ -46,6 +46,27 @@ def watchedaddsuccess():
     return render_template('watchedsuccess.html')
 
 
+
+
+# 관람 리스트에서 공연 정보 삭제 
+@app.route('/remove_from_watched/<string:performance_id>', methods=['POST'])
+def remove_from_watched(performance_id):
+    conn = get_db_connection()
+    # 중복 여부 확인
+    exists = conn.execute('SELECT * FROM myperformances WHERE pid = ?', (performance_id,)).fetchone()
+
+    conn.execute('DELETE FROM myperformances WHERE pid = ?', (performance_id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('deletewatchedsuccess'))
+
+
+# 관람 리스트 삭제 성공 페이지
+@app.route('/deletewatchedsuccess')
+def deletewatchedsuccess():
+    return render_template('deletewatchedsuccess.html')
+
+
 # 위시 리스트 페이지 로드
 @app.route('/performance/wish')
 def wish():
@@ -75,10 +96,31 @@ def add_to_wish(performance_id):
     conn.close()
     return redirect(url_for('wishaddsuccess'))
 
+
+
 # 위시 리스트 추가 성공 페이지
 @app.route('/wishaddsuccess')
 def wishaddsuccess():
     return render_template('wishsuccess.html')
+
+
+# 위시 리스트에서 공연 정보 삭제 
+@app.route('/remove_from_wish/<string:performance_id>', methods=['POST'])
+def remove_from_wish(performance_id):
+    conn = get_db_connection()
+    # 중복 여부 확인
+    exists = conn.execute('SELECT * FROM wishperformances WHERE pid = ?', (performance_id,)).fetchone()
+
+    conn.execute('DELETE FROM wishperformances WHERE pid = ?', (performance_id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('deletewishsuccess'))
+
+
+# 위시 리스트 삭제 성공 페이지
+@app.route('/deletewishsuccess')
+def deletewishsuccess():
+    return render_template('deletewishsuccess.html')
 
 
 # 리뷰 작성 페이지
