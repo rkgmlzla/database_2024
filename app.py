@@ -1,8 +1,13 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, render_template, redirect, url_for, request
 import sqlite3
 
 
 app = Flask(__name__)
+
+def get_db_connection():
+    conn = sqlite3.connect('dbproject.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 
 # 별점 / 후기 작성 페이지
@@ -12,13 +17,32 @@ def reviewPerformance():
 
 # 관람 리스트 페이지
 @app.route('/performance/watched')
-def LoadwatchedPerformance():
-   return render_template('watched.html')
+def watched():
+    conn = get_db_connection()
+    # `myperformances`와 `performances`를 JOIN
+    watched_performances = conn.execute('''
+        SELECT p.* FROM myperformances m
+        JOIN performances p ON m.pid = p.pid
+    ''').fetchall()
+    conn.close()
+    return render_template('watched.html', watched_performances=watched_performances)
 
 # 관람 리스트에 공연 정보 추가
-@app.route('/performance/add_watched')
-def AddwatchedPerformance():
-   return
+@app.route('/add_to_watched/<string:performance_id>', methods=['POST'])
+def add_to_watched(performance_id):
+    conn = get_db_connection()
+    # `myperformances` 테이블에 `pid`만 추가
+    exists = conn.execute('SELECT * FROM myperformances WHERE pid = ?', (performance_id,)).fetchone()
+    if not exists:
+        conn.execute('INSERT INTO myperformances (pid) VALUES (?)', (performance_id,))
+        conn.commit()
+    conn.close()
+    return redirect(url_for('watchedaddsuccess'))
+
+# 관람 리스트 추가 성공 페이지
+@app.route('/watchedaddsuccess')
+def watchedaddsuccess():
+    return render_template('watchedsuccess.html')
 
 # 위시 리스트 로딩 페이지
 @app.route('/performance/wish')
