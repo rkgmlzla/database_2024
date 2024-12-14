@@ -41,6 +41,9 @@ seungju
                     <form action="{{ url_for('remove_from_wish', performance_id=performance['pid']) }}" method="POST">
                         <button type="submit">삭제</button>
                     </form>
+                    <form action="{{ url_for('performanceDetail', performance_id=performance['pid']) }}" method="GET">
+                        <button type="submit">상세정보 보기</button>
+                    </form>
  main
                 </div>
             </div>
