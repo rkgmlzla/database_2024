@@ -26,7 +26,9 @@ def listPerformance():
    query = request.form.get('name')
    db = sqlite3.connect('dbproject.db')
    cursor = db.cursor()
-   cursor.execute("SELECT pname, pplace, pdate, pcast, pposter FROM performances WHERE pname LIKE ?", ('%' + query + '%',))
+   cursor.execute("SELECT pname, pplace, pdate, pcast, pposter FROM performances WHERE pname LIKE ? OR pplace LIKE ? OR pcast LIKE ?", ('%' + query + '%', '%' + query + '%', '%' + query + '%'))
+
+
    rows = cursor.fetchall()
    db.close()
    
