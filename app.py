@@ -10,10 +10,6 @@ def get_db_connection():
     return conn
 
 
-# 별점 / 후기 작성 페이지
-@app.route('/performance/review')
-def reviewPerformance():
-   return render_template('review.html')
 
 # 관람 리스트 페이지
 @app.route('/performance/watched')
@@ -38,6 +34,42 @@ def add_to_watched(performance_id):
         conn.commit()
     conn.close()
     return redirect(url_for('watchedaddsuccess'))
+
+# 리뷰 작성 페이지
+@app.route('/performance/review/<string:performance_id>', methods=['GET'])
+def reviewPerformance(performance_id):
+    conn = get_db_connection()
+    performance = conn.execute('SELECT * FROM performances WHERE pid = ?', (performance_id,)).fetchone()
+    conn.close()
+    # 공연 정보를 리뷰 페이지로 전달
+    return render_template('review.html', performance=performance)
+
+
+# 리뷰 저장 라우트
+@app.route('/performance/review/<string:performance_id>', methods=['POST'])
+def saveReview(performance_id):
+    review_star = request.form.get('review_star', type=int)  # 별점 (int)
+    review_text = request.form.get('review_text')           # 리뷰 텍스트 (TEXT)
+
+    conn = get_db_connection()
+    
+    # 해당 pid에 대한 리뷰가 이미 존재하는지 확인
+    existing_review = conn.execute('SELECT * FROM reviews WHERE pid = ?', (performance_id,)).fetchone()
+    if existing_review:
+        conn.close()
+        # 이미 리뷰가 존재하면 에러 메시지 페이지로 이동
+        return render_template('reviewerror.html', performance_id=performance_id)
+    
+    # 리뷰 저장
+    conn.execute('INSERT INTO reviews (pid, review_star, review_text) VALUES (?, ?, ?)',
+                 (performance_id, review_star, review_text))
+    conn.commit()
+    conn.close()
+    
+    # 저장 완료 후 관람 리스트 페이지로 리디렉션
+    return redirect(url_for('watched'))
+
+
 
 # 관람 리스트 추가 성공 페이지
 @app.route('/watchedaddsuccess')
