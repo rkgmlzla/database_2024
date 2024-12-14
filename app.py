@@ -10,7 +10,6 @@ def get_db_connection():
     return conn
 
 
-
 # 관람 리스트 페이지
 @app.route('/performance/watched')
 def watched():
