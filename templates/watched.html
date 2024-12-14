@@ -23,6 +23,9 @@
                         <form action="{{ url_for('seeReview', performance_id=performance['pid']) }}" method="GET" style="display: inline;">
                             <button type="submit">리뷰 보기</button>
                         </form>
+                        <form action="{{ url_for('remove_from_watched', performance_id=performance['pid']) }}" method="POST">
+                            <button type="submit">삭제</button>
+                        </form>
                     </div>
                 </div>
             {% endfor %}
