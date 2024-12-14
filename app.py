@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, request, render_template
+import sqlite3
 
 
 app = Flask(__name__)
@@ -20,15 +21,31 @@ def wishPerformance():
    return render_template('wish.html')
 
 # 검색 결과 페이지
-@app.route('/performance/result')
+@app.route('/performance/result', methods=['POST'])
 def listPerformance(): 
-   return render_template('result.html')
+   query = request.form.get('name')
+   db = sqlite3.connect('dbproject.db')
+   cursor = db.cursor()
+   cursor.execute("SELECT pname, pplace, pcast FROM performances WHERE pname LIKE ?", ('%' + query + '%',))
+   rows = cursor.fetchall()
+   db.close()
+   
+   results = [
+        {
+            'pname': row[0],
+            'pplace': row[1],
+            'pcast': row[2],
+        }
+        for row in rows
+    ] 
+   
+   print(results)
+   return render_template('result.html', results=results, query=query)
     
 # 검색 엔진 페이지 
-@app.route('/performance/search', methods=['POST'])
+@app.route('/performance/search', methods=['GET', 'POST'])
 def searchPerformance():
-  return render_template('search.html')
-
+   return render_template('search.html')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', debug=True)

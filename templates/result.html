@@ -4,6 +4,22 @@
         <meta charset="utf-8">
     </head> 
     <body>
-        <h1>Results page</h1>
+        <h1>Results</h1>
+    {% if results %}
+        <ul>
+            {% for performance in results %}
+                <li>
+                    <h2>{{ performance.pname }}</h2>
+                    <p>날짜: {{ performance.pdate }}</p>
+                    <p>장소: {{ performance.pplace }}</p>
+                    <p>출연진: {{ performance.pcast }}</p>
+                    <img src="{{ performance.pposter }}">
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>검색어 결과가 없습니다.</p>
+    {% endif %}
+ 
     </body>
 </html>
