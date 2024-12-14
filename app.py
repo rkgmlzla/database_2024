@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, redirect, render_template
 import sqlite3
 
 
@@ -12,13 +12,25 @@ def reviewPerformance():
 
 # 관람 리스트 페이지
 @app.route('/performance/watched')
-def watchedPerformance():
+def LoadwatchedPerformance():
    return render_template('watched.html')
 
-# 위시 리스트 페이지
+# 관람 리스트에 공연 정보 추가
+@app.route('/performance/add_watched')
+def AddwatchedPerformance():
+   return
+
+# 위시 리스트 로딩 페이지
 @app.route('/performance/wish')
-def wishPerformance():
+def LoadwishPerformance():
    return render_template('wish.html')
+
+
+# 위시 리스트에 공연 정보 추가 
+@app.route('/performance/add_wish', methods=['POST'])
+def AddwishPerformance():
+   return
+
 
 # 검색 결과 페이지
 @app.route('/performance/result', methods=['POST'])
@@ -26,19 +38,18 @@ def listPerformance():
    query = request.form.get('name')
    db = sqlite3.connect('dbproject.db')
    cursor = db.cursor()
-   cursor.execute("SELECT pname, pplace, pdate, pcast, pposter FROM performances WHERE pname LIKE ? OR pplace LIKE ? OR pcast LIKE ?", ('%' + query + '%', '%' + query + '%', '%' + query + '%'))
-
-
+   cursor.execute("SELECT pid, pname, pplace, pdate, pcast, pposter FROM performances WHERE pname LIKE ? OR pplace LIKE ? OR pcast LIKE ?", ('%' + query + '%', '%' + query + '%', '%' + query + '%'))
    rows = cursor.fetchall()
    db.close()
    
    results = [
         {
-            'pname': row[0],
-            'pplace': row[1],
-            'pdate' : row[2],
-            'pcast': row[3],
-            'pposter' : row[4]
+            'pid' : row[0],
+            'pname': row[1],
+            'pplace': row[2],
+            'pdate' : row[3],
+            'pcast': row[4],
+            'pposter' : row[5]
         }
         for row in rows
     ] 

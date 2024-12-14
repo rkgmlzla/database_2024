@@ -4,22 +4,40 @@
         <meta charset="utf-8">
     </head> 
     <body>
+
+        <button onclick="window.history.back()">뒤로 가기</button>
+        <a href="/performance/wish"><button>위시 페이지</button></a>
+        <a href="/performance/review"><button>리뷰 페이지</button></a>
         <h1>Results</h1>
-    {% if results %}
-        <ul>
-            {% for performance in results %}
-                <li>
-                    <h2>{{ performance.pname }}</h2>
-                    <p>장소: {{ performance.pplace }}</p>
-                    <p>날짜: {{ performance.pdate }}</p>
-                    <p>출연진: {{ performance.pcast }}</p>
-                    <img src="{{ performance.pposter }}" style="width: 200px;">
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>검색어 결과가 없습니다.</p>
-    {% endif %}
+   
+        {% if results %}
+    <ul>
+        {% for performance in results %}
+            <li>
+                <h2>{{ performance.pname }}</h2>
+                <p>장소: {{ performance.pplace }}</p>
+                <p>날짜: {{ performance.pdate }}</p>
+                <p>출연진: {{ performance.pcast }}</p>
+                <img src="{{ performance.pposter }}" style="width: 200px;">
+                
+                <!-- 위시 리스트에 추가하는 버튼 -->
+                <form action="/performance/add_wish" method="POST">
+                    <input type="hidden" name="pid" value="{{ performance.pid }}">
+                    <button type="submit">찜</button>
+                </form>
+                
+                <!-- 관람 리스트에 추가하는 버튼 -->
+                <form action="/performance/add_watched" method="POST">
+                    <input type="hidden" name="pid" value="{{ performance.pid }}">
+                    <button type="submit">관람 완료</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>검색어 결과가 없습니다.</p>
+{% endif %}
+
  
     </body>
 </html>
