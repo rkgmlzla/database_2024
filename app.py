@@ -26,11 +26,16 @@ def watched():
 @app.route('/add_to_watched/<string:performance_id>', methods=['POST'])
 def add_to_watched(performance_id):
     conn = get_db_connection()
-    # `myperformances` 테이블에 `pid`만 추가
+    # 중복 여부 확인
     exists = conn.execute('SELECT * FROM myperformances WHERE pid = ?', (performance_id,)).fetchone()
-    if not exists:
-        conn.execute('INSERT INTO myperformances (pid) VALUES (?)', (performance_id,))
-        conn.commit()
+    if exists:
+        conn.close()
+        # 중복된 경우 경고 페이지로 이동
+        return render_template('alreadyadded.html', list_type='관람 리스트')
+    
+    # 중복이 아닌 경우 추가
+    conn.execute('INSERT INTO myperformances (pid) VALUES (?)', (performance_id,))
+    conn.commit()
     conn.close()
     return redirect(url_for('watchedaddsuccess'))
 
@@ -57,10 +62,16 @@ def wish():
 @app.route('/add_to_wish/<string:performance_id>', methods=['POST'])
 def add_to_wish(performance_id):
     conn = get_db_connection()
+    # 중복 여부 확인
     exists = conn.execute('SELECT * FROM wishperformances WHERE pid = ?', (performance_id,)).fetchone()
-    if not exists:
-        conn.execute('INSERT INTO wishperformances (pid) VALUES (?)', (performance_id,))
-        conn.commit()
+    if exists:
+        conn.close()
+        # 중복된 경우 경고 페이지로 이동
+        return render_template('alreadyadded.html', list_type='위시 리스트')
+    
+    # 중복이 아닌 경우 추가
+    conn.execute('INSERT INTO wishperformances (pid) VALUES (?)', (performance_id,))
+    conn.commit()
     conn.close()
     return redirect(url_for('wishaddsuccess'))
 
