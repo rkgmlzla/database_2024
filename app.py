@@ -9,13 +9,12 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-
 # 별점 / 후기 작성 페이지
 @app.route('/performance/review')
 def reviewPerformance():
    return render_template('review.html')
 
-# 관람 리스트 페이지
+# 관람 리스트 페이지 로드
 @app.route('/performance/watched')
 def watched():
     conn = get_db_connection()
@@ -39,21 +38,40 @@ def add_to_watched(performance_id):
     conn.close()
     return redirect(url_for('watchedaddsuccess'))
 
+
 # 관람 리스트 추가 성공 페이지
 @app.route('/watchedaddsuccess')
 def watchedaddsuccess():
     return render_template('watchedsuccess.html')
 
-# 위시 리스트 로딩 페이지
+
+# 위시 리스트 페이지 로드
 @app.route('/performance/wish')
-def LoadwishPerformance():
-   return render_template('wish.html')
+def wish():
+    conn = get_db_connection()
+    wish_performances = conn.execute('''
+        SELECT p.* FROM wishperformances w
+        JOIN performances p ON w.pid = p.pid
+    ''').fetchall()
+    conn.close()
+    return render_template('wish.html', wish_performances=wish_performances)
 
 
-# 위시 리스트에 공연 정보 추가 
-@app.route('/performance/add_wish', methods=['POST'])
-def AddwishPerformance():
-   return
+# 위시 리스트에 공연 정보 추가
+@app.route('/add_to_wish/<string:performance_id>', methods=['POST'])
+def add_to_wish(performance_id):
+    conn = get_db_connection()
+    exists = conn.execute('SELECT * FROM wishperformances WHERE pid = ?', (performance_id,)).fetchone()
+    if not exists:
+        conn.execute('INSERT INTO wishperformances (pid) VALUES (?)', (performance_id,))
+        conn.commit()
+    conn.close()
+    return redirect(url_for('wishaddsuccess'))
+
+# 위시 리스트 추가 성공 페이지
+@app.route('/wishaddsuccess')
+def wishaddsuccess():
+    return render_template('wishsuccess.html')
 
 
 # 검색 결과 페이지

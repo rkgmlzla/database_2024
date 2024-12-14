@@ -21,7 +21,7 @@
                 <img src="{{ performance.pposter }}" style="width: 200px;">
                 
                 <!-- 위시 리스트에 추가하는 버튼 -->
-                    
+                <form action="{{ url_for('add_to_wish', performance_id=performance['pid']) }}" method="POST">    
                     <button type="submit">찜</button>
                 </form>
                 
