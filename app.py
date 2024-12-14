@@ -164,3 +164,15 @@ def searchPerformance():
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', debug=True)
+
+
+
+# 상세정보
+@app.route('/performance/detail/<string:performance_id>', methods=['GET'])
+def performanceDetail(performance_id):
+    conn = get_db_connection()
+    # 특정 공연 정보 조회
+    performance = conn.execute('SELECT * FROM performances WHERE pid = ?', (performance_id,)).fetchone()
+    conn.close()
+    # 상세 정보 페이지로 렌더링
+    return render_template('detail.html', performance=performance)
