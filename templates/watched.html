@@ -14,6 +14,9 @@
                         <p>장소: {{ performance['pplace'] }}</p>
                         <p>날짜: {{ performance['pdate'] }}</p>
                         <p>출연진:{{ performance['pcast'] }}</p>
+                        <form action="{{ url_for('performanceDetail', performance_id=performance['pid']) }}" method="GET">
+                            <button type="submit">상세정보 보기</button>
+                        </form>
                         <form action="{{ url_for('reviewPerformance', performance_id=performance['pid']) }}" method="GET">
                             <button type="submit">리뷰 쓰기</button>
                         </form>
