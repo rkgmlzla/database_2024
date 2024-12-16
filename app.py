@@ -31,7 +31,7 @@ def add_to_watched(performance_id):
     if exists:
         conn.close()
         # 중복된 경우 경고 페이지로 이동
-        return render_template('alreadyadded.html', list_type='관람 리스트')
+        return render_template('alreadyadded.html', list_type='관람리스트')
     
     # 중복이 아닌 경우 추가
     conn.execute('INSERT INTO myperformances (pid) VALUES (?)', (performance_id,))
@@ -84,7 +84,7 @@ def add_to_wish(performance_id):
     if exists:
         conn.close()
         # 중복된 경우 경고 페이지로 이동
-        return render_template('alreadyadded.html', list_type='위시 리스트')
+        return render_template('alreadyadded.html', list_type='위시리스트')
     
     # 중복이 아닌 경우 추가
     conn.execute('INSERT INTO wishperformances (pid) VALUES (?)', (performance_id,))

@@ -1,44 +1,155 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-    </head> 
-    <body>
+<head>
+    <meta charset="utf-8">
+    <title>검색 결과</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
 
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header a {
+            text-decoration: none;
+            color: white;
+            margin-right: 10px;
+        }
+
+        header button {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        header button:hover {
+            background-color: #777;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: white;
+            width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card-content h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .card-content p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .card-buttons {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .card-buttons form button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .card-buttons form button:hover {
+            background-color: #0056b3;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #555;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>검색 결과</h2>
+    <div>
         <a href="/performance/wish"><button>위시리스트</button></a>
         <a href="/performance/watched"><button>관람리스트</button></a>
-        <h1>Results</h1>
-   
-        {% if results %}
-    <ul>
-        {% for performance in results %}
-            <li>
-                <h2>{{ performance.pname }}</h2>
-                <p>장소: {{ performance.pplace }}</p>
-                <p>날짜: {{ performance.pdate }}</p>
-                <p>출연진: {{ performance.pcast }}</p>
-                <img src="{{ performance.pposter }}" style="width: 200px;">
-                
-                <form action="{{ url_for('performanceDetail', performance_id=performance['pid']) }}" method="GET">
-                    <button type="submit">상세정보 보기</button>
-                </form>
-            
-                <!-- 위시 리스트에 추가하는 버튼 -->
-                <form action="{{ url_for('add_to_wish', performance_id=performance['pid']) }}" method="POST">    
-                    <button type="submit">찜</button>
-                </form>
-                
-                <!-- 관람 리스트에 추가하는 버튼 -->
-                <form action="{{ url_for('add_to_watched', performance_id=performance['pid']) }}" method="POST">    
-                    <button type="submit">관람 완료</button>
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
+        <a href="/performance/search"><button>검색</button></a>
+    </div>
+    </div>
+</header>
+
+{% if results %}
+<div class="card-container">
+    {% for performance in results %}
+    <div class="card">
+        <img src="{{ performance.pposter }}" alt="공연 포스터">
+        <div class="card-content">
+            <h2>{{ performance.pname }}</h2>
+            <p>날짜 : {{ performance.pdate }}</p>
+            <p>장소 : {{ performance.pplace }}</p>
+            <p>출연진 : {{ performance.pcast }}</p>
+        </div>
+        <div class="card-buttons">
+            <form action="{{ url_for('performanceDetail', performance_id=performance['pid']) }}" method="GET">
+                <button type="submit">상세정보</button>
+            </form>
+            <form action="{{ url_for('add_to_wish', performance_id=performance['pid']) }}" method="POST">    
+                <button type="submit">찜</button>
+            </form>
+            <form action="{{ url_for('add_to_watched', performance_id=performance['pid']) }}" method="POST">    
+                <button type="submit">관람 완료</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% else %}
-    <p>검색어 결과가 없습니다.</p>
+<p class="no-results">검색어 결과가 없습니다.</p>
 {% endif %}
 
- 
-    </body>
+</body>
 </html>

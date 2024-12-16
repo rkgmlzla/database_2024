@@ -3,65 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>관람 상세 정보</title>
+    <title>리뷰 보기</title>
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
-            color: #333;
-            padding: 20px;
-            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 80px; /* Header height space */
         }
 
-        h1, h2, h3 {
-            color: #444;
+        header {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        header .nav-buttons a {
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        header .nav-buttons button {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        header .nav-buttons button:hover {
+            background-color: #777;
         }
 
         h1 {
             text-align: center;
+            color: #333;
             margin-bottom: 20px;
         }
 
         .info-container {
-            margin-bottom: 30px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
+            background-color: white;
+            padding: 20px;
+            margin: 20px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .info-container img {
+            width: 150px;
+            height: auto;
+            border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .info-container h2 {
-            margin-top: 0;
+        .performance-details {
+            flex: 1;
+        }
+
+        .performance-details h2 {
+            margin: 0 0 10px;
+            color: #555;
+        }
+
+        .performance-details p {
+            margin: 5px 0;
+            color: #666;
         }
 
         .review-container {
-            margin-bottom: 30px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
+            background-color: white;
+            padding: 20px;
+            margin: 20px;
+            width: 80%;
+            max-width: 600px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .review-container h3 {
+            margin: 0 0 10px;
+            color: #555;
         }
 
         .review-container p {
             margin: 5px 0;
+            color: #666;
         }
 
         a {
-            display: inline-block;
             text-decoration: none;
             margin-top: 20px;
         }
 
         button {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
             background-color: #007BFF;
+            color: white;
             border: none;
+            padding: 10px 20px;
             border-radius: 5px;
+            font-size: 1em;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
@@ -76,29 +138,34 @@
     </style>
 </head>
 <body>
-    <h1>관람 상세 정보</h1>
 
-    <!-- 공연 정보 -->
-    <div class="info-container">
+<header>
+    <h2>리뷰 보기</h2>
+    <div class="nav-buttons">
+        <a href="/performance/watched"><button>관람리스트</button></a>
+        <a href="/performance/search"><button>검색</button></a>
+    </div>
+</header>
+
+<div class="info-container">
+    <img src="{{ performance['pposter'] }}" alt="Poster">
+    <div class="performance-details">
         <h2>{{ performance['pname'] }}</h2>
-        <p>장소: {{ performance['pplace'] }}</p>
-        <p>날짜: {{ performance['pdate'] }}</p>
-        <p>출연진: {{ performance['pcast'] }}</p>
+        <p>날짜 : {{ performance['pdate'] }}</p>
+        <p>장소 : {{ performance['pplace'] }}</p>
+        <p>출연진 : {{ performance['pcast'] }}</p>
     </div>
+</div>
 
-    <!-- 리뷰 정보 -->
-    <div class="review-container">
-        <h3>내 리뷰</h3>
-        {% if review %}
-            <p>별점: {{ review['review_star'] }}</p>
-            <p>리뷰 내용:</p>
-            <p>{{ review['review_text'] }}</p>
-        {% else %}
-            <p>리뷰가 아직 작성되지 않았습니다.</p>
-        {% endif %}
-    </div>
+<div class="review-container">
+    <h3>내 리뷰</h3>
+    {% if review %}
+        <p>별점 : {{ review['review_star'] }}</p>
+        <p>리뷰 내용 : {{ review['review_text'] }}</p>
+    {% else %}
+        <p>리뷰가 아직 작성되지 않았습니다</p>
+    {% endif %}
+</div>
 
-    <!-- 돌아가기 버튼 -->
-    <a href="/performance/watched"><button>관람 리스트로 돌아가기</button></a>
 </body>
 </html>
