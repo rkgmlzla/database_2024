@@ -1,12 +1,94 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Success</title>
+    <title>관람리스트 삭제 성공</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+            position: absolute;
+            top: 0;
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        header .nav-buttons a {
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        header .nav-buttons button {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        header .nav-buttons button:hover {
+            background-color: #777;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 100px; /* To avoid overlap with header */
+        }
+
+        .buttons-container {
+            margin-top: 20px;
+        }
+
+        .buttons-container a button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+        }
+
+        .buttons-container a button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>공연이 관람 리스트에서 삭제되었습니다!</h1>
-    <a href="/performance/watched"><button>관람 리스트 보기</button></a>
-    <a href="/performance/search"><button>검색 페이지로 돌아가기</button></a>
+
+<header>
+    <h2>관람리스트 삭제 성공</h2>
+    <div class="nav-buttons">
+        <a href="/performance/watched"><button>관람리스트</button></a>
+        <a href="/performance/search"><button>검색</button></a>
+    </div>
+</header>
+
+<h1>공연이 관람리스트에서 삭제되었습니다</h1>
+
 </body>
 </html>

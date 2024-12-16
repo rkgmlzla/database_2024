@@ -3,30 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>관람 상세 정보</title>
- 
+    <title>위시리스트</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        header .nav-buttons a {
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        header .nav-buttons button {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        header .nav-buttons button:hover {
+            background-color: #777;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: white;
+            width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card-content h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .card-content p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .card-buttons {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .card-buttons form button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .card-buttons form button:hover {
+            background-color: #0056b3;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #555;
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Wish List Page</h1>
 
-    <div>
-        {% for performance in wish_performances %}
-            <div class="performance-container">
-                <img src="{{ performance['pposter'] }}" alt="Poster">
-                <div>
-                    <h2>{{ performance['pname'] }}</h2>
-                    <p>장소: {{ performance['pplace'] }}</p>
-                    <p>날짜: {{ performance['pdate'] }}</p>
-                    <p>출연진: {{ performance['pcast'] }}</p>
-                    <form action="{{ url_for('remove_from_wish', performance_id=performance['pid']) }}" method="POST">
-                        <button type="submit">삭제</button>
-                    </form>
-                    <form action="{{ url_for('performanceDetail', performance_id=performance['pid']) }}" method="GET">
-                        <button type="submit">상세정보 보기</button>
-                    </form>
-                </div>
-            </div>
-        {% endfor %}
+<header>
+    <h2>위시리스트</h2>
+    <div class="nav-buttons">
+        <a href="/performance/search"><button>검색</button></a>
     </div>
+</header>
+
+<div class="card-container">
+    {% if wish_performances %}
+        {% for performance in wish_performances %}
+        <div class="card">
+            <img src="{{ performance['pposter'] }}" alt="Poster">
+            <div class="card-content">
+                <h2>{{ performance['pname'] }}</h2>
+                <p>날짜 : {{ performance['pdate'] }}</p>
+                <p>장소 : {{ performance['pplace'] }}</p>
+                <p>출연진 : {{ performance['pcast'] }}</p>
+            </div>
+            <div class="card-buttons">
+                <form action="{{ url_for('performanceDetail', performance_id=performance['pid']) }}" method="GET">
+                    <button type="submit">상세정보</button>
+                </form>
+                <form action="{{ url_for('remove_from_wish', performance_id=performance['pid']) }}" method="POST">
+                    <button type="submit">삭제</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-results">위시리스트에 추가된 공연이 없습니다</p>
+    {% endif %}
+</div>
+
 </body>
 </html>

@@ -3,19 +3,42 @@
     <head>
         <meta charset="utf-8">
         <style>
-
             body {
                 margin: 0;
                 font-family: Arial, sans-serif;
             }
 
-            .header {
+            header {
+                background-color: #333;
+                color: white;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 10px;
-                background-color: #f4f4f4;
-                border-bottom: 1px solid #ccc;
+                padding: 10px 20px;
+            }
+
+            header h2 {
+                margin: 0;
+                font-size: 1.5em;
+            }
+
+            header .nav-buttons a {
+                text-decoration: none;
+                margin-left: 10px;
+            }
+
+            header .nav-buttons button {
+                background-color: #555;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 5px;
+                font-size: 1em;
+                cursor: pointer;
+            }
+
+            header .nav-buttons button:hover {
+                background-color: #777;
             }
 
             h1 {
@@ -46,9 +69,21 @@
                 border: none;
                 border-radius: 5px;
             }
+
+            input[type="submit"]:hover {
+                background-color: #0056b3;
+            }
         </style>
     </head>
     <body>
+        <header>
+            <h2>검색</h2>
+            <div class="nav-buttons">
+                <a href="/performance/wish"><button>위시리스트</button></a>
+                <a href="/performance/watched"><button>관람리스트</button></a>
+            </div>
+        </header>
+
         <h1>공연을 검색하세요</h1>
         <div class="form-container">
             <form action="/performance/result" method="POST">

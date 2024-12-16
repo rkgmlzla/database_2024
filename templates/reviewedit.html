@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>리뷰 보기</title>
+    <title>리뷰 수정</title>
     <style>
         body {
             margin: 0;
@@ -55,44 +55,37 @@
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 20px;
         }
 
-        .info-container {
+        .performance-info {
             background-color: white;
+            display: flex;
+            align-items: center;
             padding: 20px;
             margin: 20px;
             width: 80%;
             max-width: 600px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
         }
 
-        .info-container img {
+        .performance-info img {
             width: 150px;
             height: auto;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-right: 20px;
         }
 
         .performance-details {
             flex: 1;
         }
 
-        .performance-details h2 {
-            margin: 0 0 10px;
+        .performance-details h2, .performance-details p {
+            margin: 10px 0;
             color: #555;
         }
 
-        .performance-details p {
-            margin: 5px 0;
-            color: #666;
-        }
-
-        .review-container {
+        form {
             background-color: white;
             padding: 20px;
             margin: 20px;
@@ -102,24 +95,23 @@
             border-radius: 10px;
         }
 
-        .review-container h3 {
-            margin: 0 0 10px;
-            color: #555;
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
         }
 
-        .review-container p {
-            margin: 5px 0;
-            color: #666;
+        input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
         }
 
-        .review-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .review-actions form button {
+        button {
             background-color: #007BFF;
             color: white;
             border: none;
@@ -127,10 +119,9 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 1em;
-            transition: background-color 0.3s ease;
         }
 
-        .review-actions form button:hover {
+        button:hover {
             background-color: #0056b3;
         }
     </style>
@@ -138,14 +129,14 @@
 <body>
 
 <header>
-    <h2>리뷰 보기</h2>
+    <h2>리뷰 수정</h2>
     <div class="nav-buttons">
         <a href="/performance/watched"><button>관람리스트</button></a>
         <a href="/performance/search"><button>검색</button></a>
     </div>
 </header>
 
-<div class="info-container">
+<div class="performance-info">
     <img src="{{ performance['pposter'] }}" alt="Poster">
     <div class="performance-details">
         <h2>{{ performance['pname'] }}</h2>
@@ -155,27 +146,15 @@
     </div>
 </div>
 
-<div class="review-container">
-    <h3>내 리뷰</h3>
-    {% if review %}
-        <p>별점 : {{ review['review_star'] }}</p>
-        <p>리뷰 내용 : {{ review['review_text'] }}</p>
+<form action="/performance/review/edit/{{ review['pid'] }}" method="POST">
+    <label for="review_star">별점 (1~5)</label>
+    <input type="number" id="review_star" name="review_star" min="1" max="5" value="{{ review['review_star'] }}" required>
 
-        <div class="review-actions">
-            <!-- 리뷰 삭제 버튼 -->
-            <form action="/performance/review/delete/{{ review['pid'] }}" method="POST">
-                <button type="submit">리뷰 삭제</button>
-            </form>
+    <label for="review_text">리뷰 내용</label>
+    <textarea id="review_text" name="review_text" rows="5" required>{{ review['review_text'] }}</textarea>
 
-            <!-- 리뷰 수정 버튼 -->
-            <form action="/performance/review/edit/{{ review['pid'] }}" method="GET">
-                <button type="submit">리뷰 수정</button>
-            </form>
-        </div>
-    {% else %}
-        <p>리뷰가 아직 작성되지 않았습니다.</p>
-    {% endif %}
-</div>
+    <button type="submit">수정된 리뷰 저장</button>
+</form>
 
 </body>
 </html>
